@@ -21,8 +21,8 @@ RUN chmod -R o+w /var/www/app/bootstrap/cache \
     && chmod -R o+w /var/www/app/storage \
     && cp /var/www/app/.env.example /var/www/app/.env \
     && sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql/g' /var/www/app/.env \
-    && sed -i "s/DB_DATABASE=homestead/DB_HOST=${DB_DATABASE}/g" /var/www/app/.env \
-    && sed -i "s/DB_USERNAME=homestead/DB_HOST=${DB_USERNAME}/g" /var/www/app/.env \
+    && sed -i "s/DB_DATABASE=homestead/DB_DATABASE=${DB_DATABASE}/g" /var/www/app/.env \
+    && sed -i "s/DB_USERNAME=homestead/DB_USERNAME=${DB_USERNAME}/g" /var/www/app/.env \
     && sed -i "s/DB_PASSWORD=secret/DB_PASSWORD=${DB_PASSWORD}/g" /var/www/app/.env \
     && php /var/www/app/artisan key:generate
 
