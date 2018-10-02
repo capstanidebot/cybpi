@@ -7,7 +7,7 @@ RUN composer install --no-dev
 # production environment
 FROM phusion/baseimage
 
-RUN apt update && apt install --no-install-recommends nginx php-fpm -y
+RUN apt update && apt install --no-install-recommends nginx php-fpm php-mysql -y
 RUN mkdir -p /var/www/app/public
 
 COPY --from=builder /var/www/laravel /var/www/app
