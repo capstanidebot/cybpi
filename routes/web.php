@@ -1,5 +1,8 @@
 <?php
-
+#for aesthetic
+Route::get('/', function (\Illuminate\Http\Request $request) {
+ return response()->json(['result'=>'ok']);
+});
 Route::get('store', function (\Illuminate\Http\Request $request) {
 $validator = \Validator::make($request->all(), ['alias'=>'required','user_id'=>'required','command'=>'required']);
 if ($validator->fails()) { return 'error'; }
