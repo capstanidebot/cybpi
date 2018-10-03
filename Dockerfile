@@ -9,8 +9,8 @@ FROM phusion/baseimage
 
 RUN apt update \
     && apt install --no-install-recommends nginx php-fpm php-mysql php-sqlite3 php-pgsql -y \
-    && apt clean
-RUN mkdir -p /var/www/app/public
+    && apt clean \
+    && mkdir -p /var/www/app/public
 
 COPY --from=builder /var/www/laravel /var/www/app
 COPY default.conf /etc/nginx/sites-available/default
@@ -81,7 +81,6 @@ RUN chmod -R o+w /var/www/app/bootstrap/cache \
     && sed -i "s/APP_KEY=/APP_KEY=${APP_KEY}/g" /var/www/app/.env \
     && sed -i "s/APP_DEBUG=true/APP_DEBUG=${APP_DEBUG}/g" /var/www/app/.env \
     && sed -i "s/APP_LOG_LEVEL=debug/APP_LOG_LEVEL=${APP_LOG_LEVEL}/g" /var/www/app/.env \
-    #&& echo "${APP_URL}" \
     && sed -i "s/APP_URL=http:\/\/localhost/APP_URL=${APP_URL}/g" /var/www/app/.env \
     && sed -i "s/DB_CONNECTION=mysql/DB_CONNECTION=${DB_CONNECTION}/g" /var/www/app/.env \
     && sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${DB_HOST}/g" /var/www/app/.env \
@@ -105,8 +104,12 @@ RUN chmod -R o+w /var/www/app/bootstrap/cache \
     && sed -i "s/PUSHER_APP_ID=/PUSHER_APP_ID=${PUSHER_APP_ID}/g" /var/www/app/.env \
     && sed -i "s/PUSHER_APP_KEY=/PUSHER_APP_KEY=${PUSHER_APP_KEY}/g" /var/www/app/.env \
     && sed -i "s/PUSHER_APP_SECRET=/PUSHER_APP_SECRET=${PUSHER_APP_SECRET}/g" /var/www/app/.env \
-    && php /var/www/app/artisan key:generate
+    && php /var/www/app/artisan key:generate \
+    && mkdir /etc/service/start-server 
 
-RUN mkdir /etc/service/start-server
+
+WORKDIR /var/www/app 
 ADD start-server.sh /etc/service/start-server/run
-EXPOSE 80
+RUN sed -i 's/\r$//' /etc/service/start-server/run  && \  
+    chmod +x /etc/service/start-server/run
+EXPOSE 80 443

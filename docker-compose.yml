@@ -1,0 +1,18 @@
+version: '3'
+services:
+  web:
+   environment:
+     - DB_HOST=mysql
+     - DB_PASSWORD=secret
+     - DB_DATABASE=homestead
+     - DB_USERNAME=root
+     - APP_ENV=local
+     - APP_DEBUG=true 
+   build: .
+   ports:
+     - "1234:80"
+  mysql:
+   environment:
+     - MYSQL_DATABASE=homestead
+     - MYSQL_ROOT_PASSWORD=secret
+   image: "mysql:5.7"
