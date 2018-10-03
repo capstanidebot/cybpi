@@ -7,18 +7,20 @@ RUN composer install --no-dev
 # production environment
 FROM phusion/baseimage
 
-RUN apt update && apt install --no-install-recommends nginx php-fpm php-mysql -y
+RUN apt update \
+    && apt install --no-install-recommends nginx php-fpm php-mysql php-sqlite3 php-pgsql -y \
+    && apt clean
 RUN mkdir -p /var/www/app/public
 
 COPY --from=builder /var/www/laravel /var/www/app
 COPY default.conf /etc/nginx/sites-available/default
 
 ARG APP_NAME=Laravel
-ARG APP_ENV=local
+ARG APP_ENV=production
 ARG APP_KEY=
-ARG APP_DEBUG=true
+ARG APP_DEBUG=false
 ARG APP_LOG_LEVEL=debug
-ARG APP_URL=http://localhost
+ARG APP_URL=http:\\/\\/localhost
 ARG DB_CONNECTION=mysql
 ARG DB_HOST=127.0.0.1
 ARG DB_PORT=3306
@@ -79,7 +81,8 @@ RUN chmod -R o+w /var/www/app/bootstrap/cache \
     && sed -i "s/APP_KEY=/APP_KEY=${APP_KEY}/g" /var/www/app/.env \
     && sed -i "s/APP_DEBUG=true/APP_DEBUG=${APP_DEBUG}/g" /var/www/app/.env \
     && sed -i "s/APP_LOG_LEVEL=debug/APP_LOG_LEVEL=${APP_LOG_LEVEL}/g" /var/www/app/.env \
-    && sed -i "s/APP_URL=http://localhost/APP_URL=${APP_URL}/g" /var/www/app/.env \
+    #&& echo "${APP_URL}" \
+    && sed -i "s/APP_URL=http:\/\/localhost/APP_URL=${APP_URL}/g" /var/www/app/.env \
     && sed -i "s/DB_CONNECTION=mysql/DB_CONNECTION=${DB_CONNECTION}/g" /var/www/app/.env \
     && sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${DB_HOST}/g" /var/www/app/.env \
     && sed -i "s/DB_PORT=3306/DB_PORT=${DB_PORT}/g" /var/www/app/.env \
