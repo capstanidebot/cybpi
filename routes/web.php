@@ -16,10 +16,10 @@ return $data;
 Route::get('get', function (\Illuminate\Http\Request $request) {
 $validator = \Validator::make($request->all(), ['alias'=>'required']);
 if ($validator->fails()) { return 'error'; }
-$data = App\Data::where('alias',$request->alias)->get();
+$data = App\Data::where('alias',$request->alias)->paginate(5);
 return $data;
 });
 Route::get('list', function (\Illuminate\Http\Request $request) {
-$data = App\Data::all();
+$data = App\Data::paginate(5);
 return $data;
 });

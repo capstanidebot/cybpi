@@ -1,6 +1,7 @@
 version: '3'
 services:
   web:
+   build: .
    environment:
      - DB_HOST=mysql
      - DB_PASSWORD=secret
@@ -8,7 +9,6 @@ services:
      - DB_USERNAME=root
      - APP_ENV=local
      - APP_DEBUG=true 
-   build: .
    ports:
      - "1234:80"
   mysql:
